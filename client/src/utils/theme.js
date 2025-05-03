@@ -6,6 +6,7 @@ export const lightTheme = {
   secondary: "#6c757d",
 };
 
+
 export const darkTheme = {
   bg: "#121212",
   text_primary: "#ffffff",
