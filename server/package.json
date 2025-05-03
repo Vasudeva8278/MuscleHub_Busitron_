@@ -7,9 +7,9 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "migrate": "node migrations/migrate.js",
-    "start": "node server.js",  // Ensure the correct start script
+    "start": "node index.js",  // Ensure the correct start script
     "build": "react-scripts build",  // React build script if you’re using Create React App
-    "dev": "nodemon server.js" 
+    "dev": "nodemon index.js" 
   },
   "author": "",
   "license": "ISC",
