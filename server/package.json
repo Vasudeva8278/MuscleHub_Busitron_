@@ -5,10 +5,11 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "start": "nodemon index.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "migrate": "node migrations/migrate.js",
-     "build": "react-scripts build"
+    "start": "node server.js",  // Ensure the correct start script
+    "build": "react-scripts build",  // React build script if you’re using Create React App
+    "dev": "nodemon server.js" 
   },
   "author": "",
   "license": "ISC",
