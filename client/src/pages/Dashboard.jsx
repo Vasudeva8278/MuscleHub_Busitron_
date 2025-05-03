@@ -1,146 +1,134 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import styled from "styled-components";
-import { counts } from "../utils/data";
-import CountsCard from "../components/cards/CountsCard";
-import WeeklyStatCard from "../components/cards/WeeklyStatCard";
-import CategoryChart from "../components/cards/CategoryChart";
-import AddWorkout from "../components/AddWorkout";
-import WorkoutCard from "../components/cards/WorkoutCard";
-import { addWorkout, getDashboardDetails, getWorkouts } from "../api";
+import CountsCard from "../utils/CountsCard";
+import {
+  PieChart,
+  Pie,
+  Cell,
+  Tooltip,
+  ResponsiveContainer,
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+} from "recharts";
 
+// Dummy static data
+const dashboardData = {
+  totalWorkouts: 45,
+  averageCaloriesBurned: 650.34,
+  totalCaloriesBurned: 15000.56,
+  weeklyCalories: [600, 750, 800, 900, 700, 820, 880],
+};
+
+const counts = [
+  { key: "totalWorkouts", label: "Total Workouts" },
+  { key: "averageCaloriesBurned", label: "Avg Calories Burned" },
+  { key: "totalCaloriesBurned", label: "Total Calories Burned" },
+];
+
+const COLORS = ["#8884d8", "#82ca9d", "#ffc658"];
+
+// Styled Components
 const Container = styled.div`
-  flex: 1;
-  height: 100%;
-  display: flex;
-  justify-content: center;
-  padding: 22px 0px;
-  overflow-y: scroll;
-`;
-const Wrapper = styled.div`
-  flex: 1;
-  max-width: 1400px;
-  display: flex;
-  flex-direction: column;
-  gap: 22px;
-  @media (max-width: 600px) {
-    gap: 12px;
-  }
-`;
-const Title = styled.div`
-  padding: 0px 16px;
-  font-size: 22px;
-  color: ${({ theme }) => theme.text_primary};
-  font-weight: 500;
-`;
-const FlexWrap = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  gap: 22px;
-  padding: 0px 16px;
-  @media (max-width: 600px) {
-    gap: 12px;
-  }
-`;
-const Section = styled.div`
-  display: flex;
-  flex-direction: column;
-  padding: 0px 16px;
-  gap: 22px;
-  padding: 0px 16px;
-  @media (max-width: 600px) {
-    gap: 12px;
-  }
-`;
-const CardWrapper = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 20px;
-  margin-bottom: 100px;
-  @media (max-width: 600px) {
-    gap: 12px;
-  }
+  padding: 24px;
+  font-family: 'Segoe UI', sans-serif;
+  background-color: #f9f9f9;
 `;
 
+const Title = styled.h2`
+  margin-bottom: 24px;
+  color: #333;
+`;
+
+const CountsGrid = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  gap: 24px;
+  margin-bottom: 40px;
+`;
+
+const ChartSection = styled.div`
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  gap: 32px;
+`;
+
+const ChartBox = styled.div`
+  background: #fff;
+  padding: 16px;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  height: 350px;
+`;
+
+const ChartTitle = styled.h3`
+  text-align: center;
+  margin-bottom: 12px;
+  color: #444;
+`;
+
+// Component
 const Dashboard = () => {
-  const [loading, setLoading] = useState(false);
-  const [data, setData] = useState();
-  const [buttonLoading, setButtonLoading] = useState(false);
-  const [todaysWorkouts, setTodaysWorkouts] = useState([]);
-  const [workout, setWorkout] = useState(`#Legs
--Back Squat
--5 setsX15 reps
--30 kg
--10 min`);
+  const pieData = [
+    { name: "Avg Burned", value: dashboardData.averageCaloriesBurned },
+    { name: "Remaining", value: 1000 - dashboardData.averageCaloriesBurned },
+  ];
 
-  const dashboardData = async () => {
-    setLoading(true);
-    const token = localStorage.getItem("fittrack-app-token");
-    await getDashboardDetails(token).then((res) => {
-      setData(res.data);
-      console.log(res.data);
-      setLoading(false);
-    });
-  };
-  const getTodaysWorkout = async () => {
-    setLoading(true);
-    const token = localStorage.getItem("fittrack-app-token");
-    await getWorkouts(token, "").then((res) => {
-      setTodaysWorkouts(res?.data?.todaysWorkouts);
-      console.log(res.data);
-      setLoading(false);
-    });
-  };
+  const barData = dashboardData.weeklyCalories.map((val, i) => ({
+    name: `Day ${i + 1}`,
+    calories: val,
+  }));
 
-  const addNewWorkout = async () => {
-    setButtonLoading(true);
-    const token = localStorage.getItem("fittrack-app-token");
-    await addWorkout(token, { workoutString: workout })
-      .then((res) => {
-        dashboardData();
-        getTodaysWorkout();
-        setButtonLoading(false);
-      })
-      .catch((err) => {
-        alert(err);
-      });
-  };
+  const Container = styled.div`
+  padding: 24px;
+  background-color: ${({ theme }) => theme.bg};
+  color: ${({ theme }) => theme.text_primary};
+`;
 
-  useEffect(() => {
-    dashboardData();
-    getTodaysWorkout();
-  }, []);
   return (
     <Container>
-      <Wrapper>
-        <Title>Dashboard</Title>
-        <FlexWrap>
-          {counts.map((item) => (
-            <CountsCard item={item} data={data} />
-          ))}
-        </FlexWrap>
+      <Title>Dashboard (Static Data)</Title>
 
-        <FlexWrap>
-          <WeeklyStatCard data={data} />
-          <CategoryChart data={data} />
-          <AddWorkout
-            workout={workout}
-            setWorkout={setWorkout}
-            addNewWorkout={addNewWorkout}
-            buttonLoading={buttonLoading}
-          />
-        </FlexWrap>
+      <CountsGrid>
+        {counts.map((item) => (
+          <CountsCard key={item.key} item={item} data={dashboardData} />
+        ))}
+      </CountsGrid>
 
-        <Section>
-          <Title>Todays Workouts</Title>
-          <CardWrapper>
-            {todaysWorkouts.map((workout) => (
-              <WorkoutCard workout={workout} />
-            ))}
-          </CardWrapper>
-        </Section>
-      </Wrapper>
+      <ChartSection>
+        <ChartBox>
+          <ChartTitle>Average Calories Burned</ChartTitle>
+          <ResponsiveContainer width="100%" height="90%">
+            <PieChart>
+              <Pie
+                data={pieData}
+                dataKey="value"
+                nameKey="name"
+                outerRadius={100}
+                label
+              >
+                {pieData.map((entry, i) => (
+                  <Cell key={`cell-${i}`} fill={COLORS[i % COLORS.length]} />
+                ))}
+              </Pie>
+              <Tooltip />
+            </PieChart>
+          </ResponsiveContainer>
+        </ChartBox>
+
+        <ChartBox>
+          <ChartTitle>Weekly Calories Burned</ChartTitle>
+          <ResponsiveContainer width="100%" height="90%">
+            <BarChart data={barData}>
+              <XAxis dataKey="name" />
+              <YAxis />
+              <Tooltip />
+              <Bar dataKey="calories" fill="#82ca9d" />
+            </BarChart>
+          </ResponsiveContainer>
+        </ChartBox>
+      </ChartSection>
     </Container>
   );
 };

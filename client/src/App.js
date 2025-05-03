@@ -2,13 +2,13 @@ import { ThemeProvider, styled } from "styled-components";
 import { lightTheme } from "./utils/Themes";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Authentication from "./pages/Authentication";
-import { useState } from "react";
 import { useSelector } from "react-redux";
 import Navbar from "./components/Navbar";
 import Dashboard from "./pages/Dashboard";
 import Workouts from "./pages/Workouts";
 import Tutorials from "./components/cards/Tutorials";
 import Blogs from "./components/cards/Blogs";
+
 const Container = styled.div`
   width: 100%;
   height: 100vh;
@@ -23,24 +23,27 @@ const Container = styled.div`
 
 function App() {
   const { currentUser } = useSelector((state) => state.user);
+
   return (
-    <BrowserRouter>
-      {currentUser ? (
-        <Container>
-          <Navbar currentUser={currentUser} />
-          <Routes>
-            <Route path="/" exact element={<Dashboard />} />
-            <Route path="/workouts" exact element={<Workouts />} />
-            <Route path="/tutorials" exact element={<Tutorials />} />
-            <Route path="/blogs" exact element={<Blogs />} />
-          </Routes>
-        </Container>
-      ) : (
-        <Container>
-          <Authentication />
-        </Container>
-      )}
-    </BrowserRouter>
+    <ThemeProvider theme={lightTheme}>
+      <BrowserRouter>
+        {currentUser ? (
+          <Container>
+            <Navbar currentUser={currentUser} />
+            <Routes>
+              <Route path="/" exact element={<Dashboard />} />
+              <Route path="/workouts" exact element={<Workouts />} />
+              <Route path="/tutorials" exact element={<Tutorials />} />
+              <Route path="/blogs" exact element={<Blogs />} />
+            </Routes>
+          </Container>
+        ) : (
+          <Container>
+            <Authentication />
+          </Container>
+        )}
+      </BrowserRouter>
+    </ThemeProvider>
   );
 }
 
