@@ -6,7 +6,6 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DateCalendar } from "@mui/x-date-pickers";
 import { getWorkouts } from "../api";
 import { CircularProgress } from "@mui/material";
-import { useDispatch } from "react-redux";
 import { useTheme } from "styled-components";
 
 const Container = styled.div`
@@ -74,7 +73,6 @@ const SecTitle = styled.div`
 `;
 
 const Workouts = () => {
-  const dispatch = useDispatch();
   const theme = useTheme();
   const [todaysWorkouts, setTodaysWorkouts] = useState([]);
   const [loading, setLoading] = useState(false);
