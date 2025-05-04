@@ -1,6 +1,6 @@
 [build]
-  base = "" # Set to the root directory if no subdirectory is needed
-  publish = "client/dist" # Ensure this matches the actual build output directory
+  base = "client"
+  publish = "dist"
   command = "npm run build"
 
 [[redirects]]
