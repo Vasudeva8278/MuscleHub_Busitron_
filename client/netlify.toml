@@ -1,6 +1,6 @@
 [build]
   base = "client"
-  publish = "client/dist" # Ensure this matches the actual output directory
+ nm  publish = "dist" # Corrected publish directory
   command = "npm run build"
 
 [[redirects]]

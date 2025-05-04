@@ -91,8 +91,10 @@ const Workouts = () => {
   };
 
   useEffect(() => {
-    getTodaysWorkout();
-  }, [date]);
+    getTodaysWorkout(); // Ensure this function is called
+  }, [getTodaysWorkout]); // Add 'getTodaysWorkout' to the dependency array
+
+
   return (
     <Container>
       <Wrapper>
