@@ -80,12 +80,6 @@ const Dashboard = () => {
     calories: val,
   }));
 
-  const Container = styled.div`
-  padding: 24px;
-  background-color: ${({ theme }) => theme.bg};
-  color: ${({ theme }) => theme.text_primary};
-`;
-
   return (
     <Container>
       <Title>Dashboard (Static Data)</Title>
